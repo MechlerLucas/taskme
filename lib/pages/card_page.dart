@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../popup_menus/new_task_popup.dart';
+import '../popup_menus/task_detail_popup.dart';
+
 class CardPage extends StatefulWidget {
   const CardPage({super.key});
 
@@ -55,6 +58,9 @@ class _CardPageState extends State<CardPage> {
               ],
             ),
             const SizedBox(height: 20),
+
+            // Cards falsos para fins de amonstragem
+
             // Card para "Hoje"
             _buildTaskCard(
               title: 'Hoje - 29/08/24',
@@ -65,6 +71,7 @@ class _CardPageState extends State<CardPage> {
               ],
             ),
             const SizedBox(height: 10),
+
             // Card para "Amanhã"
             _buildTaskCard(
               title: 'Amanhã - 30/08/24',
@@ -74,25 +81,29 @@ class _CardPageState extends State<CardPage> {
                 _buildTaskItem('Remédio Metformina', '14h', 5),
               ],
             ),
-            const Spacer(),
-            ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.deepPurple,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(25),
-                ),
-              ),
-              child: const SizedBox(
-                width: double.infinity,
-                child: Center(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 16),
-                    child: Text('Criar', style: TextStyle(fontSize: 18)),
+
+            // FIM Cards falsos para fins de amonstragem
+
+            const Spacer(), //Arrumar a tela para ter barras laterais, com isso essa linha some
+
+            Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  NewTaskPopup.showNewTaskPopup(context);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 50),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25),
                   ),
                 ),
+                child: const Text(
+                  'Criar',
+                  style: TextStyle(fontSize: 18, color: Colors.white),
+                ),
               ),
-            ),
+            )
           ],
         ),
       ),
@@ -127,56 +138,67 @@ class _CardPageState extends State<CardPage> {
   Widget _buildTaskItem(String taskTitle, String taskSubtitle, int arrowIndex) {
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    const Icon(Icons.star_border),
-                    const SizedBox(width: 8),
-                    Text(
-                      taskTitle,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    if (taskTitle.contains('Recurrente'))
-                      const Text(
-                        'Recurrente',
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  taskSubtitle,
-                  style: const TextStyle(color: Colors.grey),
+        GestureDetector(
+          onTap: () {
+            TaskPopup.showTaskPopup(context);
+          },
+          child: Container(
+            margin: const EdgeInsets.symmetric(vertical: 8), // Espaçamento entre os cards
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.white, // Cor de fundo do item
+              borderRadius: BorderRadius.circular(12), // Bordas arredondadas
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1), // Sombra suave
+                  blurRadius: 6,
+                  offset: const Offset(0, 3), // Sombra deslocada para baixo
                 ),
               ],
             ),
-            IconButton(
-              icon: Icon(
-                Icons.arrow_upward,
-                color: arrowColors[arrowState[arrowIndex]],
-              ),
-              onPressed: () {
-                setState(() {
-                  // Muda a cor da seta ciclicamente (cinza -> amarelo -> vermelho)
-                  arrowState[arrowIndex] =
-                      (arrowState[arrowIndex] + 1) % arrowColors.length;
-                });
-              },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        const Icon(Icons.star_border),
+                        const SizedBox(width: 8),
+                        Text(
+                          taskTitle,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      taskSubtitle,
+                      style: const TextStyle(color: Colors.grey),
+                    ),
+                  ],
+                ),
+                IconButton(
+                  icon: Icon(
+                    Icons.arrow_upward,
+                    color: arrowColors[arrowState[arrowIndex]],
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      // Muda a cor da seta ciclicamente (cinza -> amarelo -> vermelho)
+                      arrowState[arrowIndex] =
+                          (arrowState[arrowIndex] + 1) % arrowColors.length;
+                    });
+                  },
+                ),
+              ],
             ),
-          ],
+          ),
         ),
         const Divider(),
       ],

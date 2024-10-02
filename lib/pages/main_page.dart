@@ -1,18 +1,40 @@
-import 'package:application/pages/card_page.dart';
-import 'package:application/pages/signup_page.dart';
 import 'package:flutter/material.dart';
-import 'login_page.dart';
 
+import 'card_page.dart';
+import 'settings_page.dart';
+import 'about.dart';
+import 'login_page.dart';
+import '/popup_menus/drawer.dart';
 
 // Tela base, aqui, quaisquer modificações feitas afetarão todas as telas.
 
 class MainPage extends StatefulWidget {
+  const MainPage({super.key});
+
   @override
-  _MainPageState createState() => _MainPageState();
+  MainPageState createState() => MainPageState();
 }
 
-class _MainPageState extends State<MainPage> {
+class MainPageState extends State<MainPage> {
+
   int _currentIndex = 0;
+
+  // Lista com os títulos das telas
+  final List<String> _titles = [
+    'Página Inicial', // Para CardPage
+    'Configurações',  // Para LoginPage
+    'About Taskme',   // About
+    'Login',          // Para SignUpScreen
+  ];
+
+  // ALTERAR para usar push, e poder voltar de quaisquer telas
+  // Função para alterar o índice de tela
+  void _onSelectScreen(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+    Navigator.pop(context); // Fecha o Drawer após a seleção
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,43 +42,29 @@ class _MainPageState extends State<MainPage> {
       appBar: AppBar(
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
-        title: const Text('Tarefas Diárias'),
-        leading: IconButton(
-            icon: const Icon(Icons.menu),
-            //Ação para menu de appBar
-            onPressed: () {},
-          ),
+        title: Text(_titles[_currentIndex]), // Título dinâmico com base na tela
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: const Icon(Icons.menu),
+              onPressed: () {
+                Scaffold.of(context).openDrawer(); // Abre o Drawer ao clicar no botão de menu
+              },
+            );
+          },
+        ),
+      ),
+      drawer: CustomDrawer(
+        onSelectScreen: _onSelectScreen, // Passa a função de mudança de tela para o Drawer
       ),
       body: IndexedStack(
         index: _currentIndex,
-        //A ordem que os itens ficam nessa lista, é a ordem que elas são referenciadas na barra de navegação inferior
         children: const [
           CardPage(),
+          SettingsPage(),
+          AboutPage(),
           LoginPage(),
-          SignUpScreen(),
         ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_balance),
-            label: 'About',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.login),
-            label: 'Login',
-          ),
-        ],
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
       ),
     );
   }

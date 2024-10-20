@@ -50,17 +50,6 @@ class NewTaskPopup {
             ElevatedButton(
               child: const Text('Criar'),
               onPressed: () {
-                // Captura os valores preenchidos nos campos
-                String taskDescription = taskDescriptionController.text;
-                String taskRecurrence = taskRecurrenceController.text;
-                String taskDetails = taskDetailsController.text;
-
-                // Exibe os valores no console ou execute a ação desejada
-                print('Descrição da Task: $taskDescription');
-                print('Recorrência: $taskRecurrence');
-                print('Descrição: $taskDetails');
-
-                // Fecha o pop-up
                 Navigator.of(context).pop();
               },
             ),

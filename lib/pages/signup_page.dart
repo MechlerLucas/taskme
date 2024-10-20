@@ -1,3 +1,4 @@
+import 'package:application/pages/main_page.dart';
 import 'package:flutter/material.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -22,6 +23,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.blue,
+        foregroundColor: Colors.white,
+        title: Text("Crie sua conta"),
+      ),
       body: ListView(
         padding: const EdgeInsets.all(16.0),
         children: <Widget>[
@@ -136,7 +142,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
           const SizedBox(height: 24),
           ElevatedButton(
             onPressed: () {
-              // Ação ao cadastrar
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const MainPage(),
+                ),
+              );
             },
             style: ElevatedButton.styleFrom(
               minimumSize: const Size(double.infinity, 50),

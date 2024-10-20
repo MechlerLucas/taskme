@@ -21,7 +21,7 @@ class MainPageState extends State<MainPage> {
 
   // Lista com os títulos das telas
   final List<String> _titles = [
-    'Página Inicial', // Para CardPage
+    'Minhas tasks', // Para CardPage
     'Configurações',  // Para LoginPage
     'About Taskme',   // About
     'Login',          // Para SignUpScreen
@@ -53,6 +53,18 @@ class MainPageState extends State<MainPage> {
             );
           },
         ),
+        actions: [
+          if (_currentIndex != 0) // Verifica se a pagina ativa é a Main page
+            IconButton(
+              icon: const Icon(Icons.home),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => MainPage()), // Navega para a página MainPage
+                );
+              },
+            ),
+        ],
       ),
       drawer: CustomDrawer(
         onSelectScreen: _onSelectScreen, // Passa a função de mudança de tela para o Drawer
